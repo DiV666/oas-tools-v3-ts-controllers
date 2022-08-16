@@ -1,0 +1,87 @@
+openapi: 3.0.0
+info:
+  description: 'Test oas-tools V3'
+  version: 1.0.0
+  title: 'OAS Tools V3'
+  license:
+    name: 'No license'
+    url: 'https://choosealicense.com/no-permission/'
+paths:
+  /v1/user:
+    post:
+      x-router-controller: userRoute
+      operationId: userPostCreate
+      tags:
+        - User
+      summary: 'Create a user'
+      description: 'Create a user'
+      requestBody:
+        $ref: '#/components/requestBodies/User'
+      responses:
+        '201':
+          description: 'The user has been created'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/Unknown'
+servers:
+  - url: /api
+components:
+  responses:
+    BadRequest:
+      description: 'Bad request. Invalid data received.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: 'The specified resource was not found.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unknown:
+      description: 'Unknown error'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  requestBodies:
+    User:
+      description: 'A JSON object containing user information'
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+  schemas:
+    Error:
+      title: 'The error object'
+      required:
+        - message
+      properties:
+        message:
+          type: string
+    User:
+      type: object
+      required:
+        - id
+        - name
+        - role
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
